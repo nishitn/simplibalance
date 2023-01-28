@@ -9,6 +9,7 @@ import java.util.*
 data class PlayerBalanceEntity(
     @PrimaryKey val id: UUID = UUID.randomUUID(),
     val name: String,
+    var buyIns: Double = 0.0,
     var initialValue: Double = 0.0,
     var finalValue: Double = 0.0,
 )

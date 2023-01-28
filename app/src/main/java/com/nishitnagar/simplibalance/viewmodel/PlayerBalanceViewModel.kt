@@ -51,19 +51,19 @@ class PlayerBalanceViewModel @Inject constructor(
 
 class PlayerBalanceViewModelProvider : PreviewParameterProvider<PlayerViewModelInterface> {
     val previewViewModel = object : PlayerViewModelInterface {
-        override val playerBalancesFlow: Flow<List<PlayerBalanceEntity>>
-            get() = flowOf(listOf(PlayerBalanceEntity(name = "name1")))
+        override val playerBalancesFlow: Flow<List<PlayerBalanceEntity>> =
+            flowOf(listOf(PlayerBalanceEntity(name = "name1"), PlayerBalanceEntity(name = "name2")))
 
         override fun insert(playerBalanceEntity: PlayerBalanceEntity) {
-            TODO("Not yet implemented")
+            /* Not needed */
         }
 
         override fun update(playerBalanceEntity: PlayerBalanceEntity) {
-            TODO("Not yet implemented")
+            /* Not needed */
         }
 
         override fun delete(playerBalanceEntity: PlayerBalanceEntity) {
-            TODO("Not yet implemented")
+            /* Not needed */
         }
     }
     override val values = listOf(previewViewModel).asSequence()

@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.nishitnagar.simplibalance
 
 import android.os.Bundle
@@ -8,13 +10,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.nishitnagar.simplibalance.data.PlayerBalanceEntity
+import com.nishitnagar.simplibalance.model.PopupStates
 import com.nishitnagar.simplibalance.ui.theme.SimplibalanceTheme
 import com.nishitnagar.simplibalance.viewmodel.PlayerBalanceViewModel
 import com.nishitnagar.simplibalance.viewmodel.PlayerBalanceViewModelProvider
@@ -22,7 +25,7 @@ import com.nishitnagar.simplibalance.viewmodel.PlayerViewModelInterface
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class PokerInputActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -33,9 +36,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-enum class PopupStates { OPEN, CLOSE }
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
 fun BalanceInputScreen(
@@ -45,6 +45,7 @@ fun BalanceInputScreen(
         val popupState = remember { mutableStateOf(PopupStates.CLOSE) }
         Scaffold(topBar = { AppBar() },
             content = { MainContent(modifier = Modifier.padding(it), playerBalanceViewModel) },
+            bottomBar = { BottomBar() },
             floatingActionButton = { AddPlayerFloatingActionButton(popupState) })
         ControlPopup(popupState = popupState, playerBalanceViewModel = playerBalanceViewModel)
     }
@@ -73,28 +74,20 @@ fun AddPlayerFloatingActionButton(popupState: MutableState<PopupStates>) {
 }
 
 @Composable
-fun MainContent(modifier: Modifier, playerBalanceViewModel: PlayerViewModelInterface) {
-    val playerBalances = playerBalanceViewModel.playerBalancesFlow.collectAsState(initial = listOf())
-
+fun MainContent(modifier: Modifier = Modifier, playerBalanceViewModel: PlayerViewModelInterface) {
     Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-        PlayerBalanceColumn(
-            playerBalances = playerBalances, modifier = modifier, playerBalanceViewModel = playerBalanceViewModel
-        )
+        PlayerBalanceColumn(modifier = modifier, playerBalanceViewModel = playerBalanceViewModel)
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Preview(showBackground = false)
 @Composable
 fun AppBar() {
-    TopAppBar(title = {
-        Text(text = "SimpliBalance")
-    }, navigationIcon = {
-        IconButton(onClick = {}) {
-            Icon(Icons.Filled.ArrowBack, "backIcon", tint = MaterialTheme.colorScheme.onPrimary)
-        }
-    }, colors = TopAppBarDefaults.topAppBarColors(
-        containerColor = MaterialTheme.colorScheme.primary, titleContentColor = MaterialTheme.colorScheme.onPrimary
-    )
+    TopAppBar(title = { Text(text = "SimpliBalance") },
+        navigationIcon = { IconButton(onClick = {}) { Icon(Icons.Outlined.Menu, "backIcon") } },
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = MaterialTheme.colorScheme.primary,
+            titleContentColor = MaterialTheme.colorScheme.onPrimary,
+            navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
+        )
     )
 }
