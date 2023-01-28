@@ -6,13 +6,11 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -29,12 +27,13 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         val playerBalanceViewModel: PlayerBalanceViewModel by viewModels()
-
         setContent {
             BalanceInputScreen(playerBalanceViewModel)
         }
     }
 }
+
+enum class PopupStates { OPEN, CLOSE }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
@@ -43,8 +42,33 @@ fun BalanceInputScreen(
     @PreviewParameter(PlayerBalanceViewModelProvider::class) playerBalanceViewModel: PlayerViewModelInterface
 ) {
     SimplibalanceTheme {
+        val popupState = remember { mutableStateOf(PopupStates.CLOSE) }
         Scaffold(topBar = { AppBar() },
-            content = { MainContent(modifier = Modifier.padding(it), playerBalanceViewModel) })
+            content = { MainContent(modifier = Modifier.padding(it), playerBalanceViewModel) },
+            floatingActionButton = { AddPlayerFloatingActionButton(popupState) })
+        ControlPopup(popupState = popupState, playerBalanceViewModel = playerBalanceViewModel)
+    }
+}
+
+@Composable
+fun ControlPopup(popupState: MutableState<PopupStates>, playerBalanceViewModel: PlayerViewModelInterface) {
+    when (popupState.value) {
+        PopupStates.OPEN -> {
+            AddPlayerPopup(onCLickDismiss = { popupState.value = PopupStates.CLOSE }, onClickSave = {
+                playerBalanceViewModel.insert(PlayerBalanceEntity(name = it))
+                popupState.value = PopupStates.CLOSE
+            })
+        }
+        PopupStates.CLOSE -> {
+            /* Will just dismiss popup */
+        }
+    }
+}
+
+@Composable
+fun AddPlayerFloatingActionButton(popupState: MutableState<PopupStates>) {
+    FloatingActionButton(onClick = { popupState.value = PopupStates.OPEN }) {
+        Icon(Icons.Default.Add, contentDescription = "Add Player")
     }
 }
 
@@ -56,26 +80,6 @@ fun MainContent(modifier: Modifier, playerBalanceViewModel: PlayerViewModelInter
         PlayerBalanceColumn(
             playerBalances = playerBalances, modifier = modifier, playerBalanceViewModel = playerBalanceViewModel
         )
-    }
-}
-
-@Composable
-fun PlayerBalanceColumn(
-    playerBalances: State<List<PlayerBalanceEntity>>,
-    modifier: Modifier = Modifier,
-    playerBalanceViewModel: PlayerViewModelInterface,
-) {
-    LazyColumn(
-        modifier = modifier.fillMaxSize()
-    ) {
-        items(playerBalances.value.size) { index ->
-            PlayerBalanceRow(item = playerBalances.value[index])
-        }
-        item {
-            Button(onClick = { playerBalanceViewModel.insert(PlayerBalanceEntity(name = "name1")) }) {
-                Text("Add Player")
-            }
-        }
     }
 }
 

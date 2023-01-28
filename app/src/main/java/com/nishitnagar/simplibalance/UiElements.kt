@@ -1,7 +1,10 @@
 package com.nishitnagar.simplibalance
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -14,6 +17,22 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.nishitnagar.simplibalance.data.PlayerBalanceEntity
 import com.nishitnagar.simplibalance.data.PlayerBalanceEntityProvider
+import com.nishitnagar.simplibalance.viewmodel.PlayerViewModelInterface
+
+@Composable
+fun PlayerBalanceColumn(
+    playerBalances: State<List<PlayerBalanceEntity>>,
+    modifier: Modifier = Modifier,
+    playerBalanceViewModel: PlayerViewModelInterface,
+) {
+    LazyColumn(
+        modifier = modifier.fillMaxSize()
+    ) {
+        items(playerBalances.value.size) { index ->
+            PlayerBalanceRow(item = playerBalances.value[index])
+        }
+    }
+}
 
 @Preview(showBackground = true)
 @Composable
@@ -24,12 +43,12 @@ fun PlayerBalanceRow(@PreviewParameter(PlayerBalanceEntityProvider::class) item:
         BalanceTextField(value = item.initialValue,
             label = "Initial Value",
             modifier = Modifier.weight(1f),
-            onValueChange = { item.initialValue = it.toDouble() })
+            onValueChange = { item.initialValue = if(it.toDoubleOrNull() == null) 0.0 else it.toDouble() })
 
         BalanceTextField(value = item.finalValue,
             label = "Final Value",
             modifier = Modifier.weight(1f),
-            onValueChange = { item.finalValue = it.toDouble() })
+            onValueChange = { item.finalValue = if(it.toDoubleOrNull() == null) 0.0 else it.toDouble() })
     }
 }
 
@@ -48,6 +67,11 @@ fun BalanceTextField(value: Double, label: String, modifier: Modifier = Modifier
             },
         label = { Text(text = label) },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        trailingIcon = {
+            if ( state.text.toDoubleOrNull() == null) {
+                Icon(Icons.Filled.Warning, "error", tint = MaterialTheme.colorScheme.error)
+            }
+        },
         onValueChange = {
             state = it
             onValueChange(state.text)
