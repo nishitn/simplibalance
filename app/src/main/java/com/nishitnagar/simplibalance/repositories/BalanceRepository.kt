@@ -14,4 +14,6 @@ class BalanceRepository(
     suspend fun update(playerBalanceEntity: PlayerBalanceEntity) = playerBalanceDao.update(playerBalanceEntity)
 
     suspend fun delete(playerBalanceEntity: PlayerBalanceEntity) = playerBalanceDao.delete(playerBalanceEntity)
+
+    suspend fun deleteAll() = playerBalanceDao.deleteAll()
 }

@@ -14,6 +14,9 @@ interface PlayerBalanceDao {
     @Delete
     suspend fun delete(playerBalanceEntity: PlayerBalanceEntity)
 
+    @Query("DELETE FROM Player_Balances")
+    suspend fun deleteAll()
+
     @Query("SELECT * FROM Player_Balances")
     fun getPlayerBalances(): Flow<List<PlayerBalanceEntity>>
 }

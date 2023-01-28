@@ -20,6 +20,8 @@ interface PlayerViewModelInterface {
     fun update(playerBalanceEntity: PlayerBalanceEntity)
 
     fun delete(playerBalanceEntity: PlayerBalanceEntity)
+
+    fun deleteAll()
 }
 
 @HiltViewModel
@@ -47,6 +49,12 @@ class PlayerBalanceViewModel @Inject constructor(
             balanceRepository.delete(playerBalanceEntity)
         }
     }
+
+    override fun deleteAll() {
+        ioScope.launch {
+            balanceRepository.deleteAll()
+        }
+    }
 }
 
 class PlayerBalanceViewModelProvider : PreviewParameterProvider<PlayerViewModelInterface> {
@@ -63,6 +71,10 @@ class PlayerBalanceViewModelProvider : PreviewParameterProvider<PlayerViewModelI
         }
 
         override fun delete(playerBalanceEntity: PlayerBalanceEntity) {
+            /* Not needed */
+        }
+
+        override fun deleteAll() {
             /* Not needed */
         }
     }

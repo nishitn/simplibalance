@@ -26,13 +26,11 @@ import com.nishitnagar.simplibalance.data.PlayerBalanceEntityProvider
 import com.nishitnagar.simplibalance.viewmodel.PlayerViewModelInterface
 
 @Composable
-fun PlayerBalanceColumn(
-    modifier: Modifier = Modifier, playerBalanceViewModel: PlayerViewModelInterface
-) {
+fun PlayerBalanceColumn(playerBalanceViewModel: PlayerViewModelInterface) {
     val playerBalances = playerBalanceViewModel.playerBalancesFlow.collectAsState(initial = listOf())
 
     LazyColumn(
-        modifier = modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize()
     ) {
         items(playerBalances.value.size) { index ->
             PlayerBalanceRow(item = playerBalances.value[index], playerBalanceViewModel = playerBalanceViewModel)
@@ -46,7 +44,7 @@ fun PlayerBalanceRow(
     playerBalanceViewModel: PlayerViewModelInterface
 ) {
     Column(
-        modifier = Modifier.padding(all = 8.dp)
+        modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
@@ -62,7 +60,8 @@ fun PlayerBalanceRow(
             })
         }
         Row {
-            BalanceTextField(value = item.initialValue,
+            BalanceTextField(
+                value = item.initialValue,
                 label = "Initial Value",
                 modifier = Modifier.weight(1f),
                 onValueChange = {
@@ -72,7 +71,8 @@ fun PlayerBalanceRow(
 
             Spacer(modifier = Modifier.width(8.dp))
 
-            BalanceTextField(value = item.finalValue,
+            BalanceTextField(
+                value = item.finalValue,
                 label = "Final Value",
                 modifier = Modifier.weight(1f),
                 onValueChange = {

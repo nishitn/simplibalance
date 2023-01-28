@@ -3,7 +3,9 @@ package com.nishitnagar.simplibalance.di
 import android.app.Application
 import com.nishitnagar.simplibalance.data.AppDatabase
 import com.nishitnagar.simplibalance.data.PlayerBalanceDao
+import com.nishitnagar.simplibalance.data.ValueRatioDao
 import com.nishitnagar.simplibalance.repositories.BalanceRepository
+import com.nishitnagar.simplibalance.repositories.ValueRatioRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,6 +25,18 @@ class AppModule {
     @Provides
     fun providePlayerBalanceDao(appDatabase: AppDatabase): PlayerBalanceDao {
         return appDatabase.playerBalanceDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideValueRatioRepository(valueRatioDao: ValueRatioDao): ValueRatioRepository {
+        return ValueRatioRepository(valueRatioDao)
+    }
+
+    @Singleton
+    @Provides
+    fun provideValueRatioDao(appDatabase: AppDatabase): ValueRatioDao {
+        return appDatabase.valueRatioDao()
     }
 
     @Singleton
