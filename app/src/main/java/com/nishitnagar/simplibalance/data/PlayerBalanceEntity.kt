@@ -1,6 +1,5 @@
 package com.nishitnagar.simplibalance.data
 
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.*
@@ -10,10 +9,6 @@ data class PlayerBalanceEntity(
     @PrimaryKey val id: UUID = UUID.randomUUID(),
     val name: String,
     var buyIns: Double? = 0.0,
-    var initialValue: Double? = 0.0,
-    var finalValue: Double? = 0.0,
+    var initialChips: Double? = 0.0,
+    var finalChips: Double? = 0.0,
 )
-
-class PlayerBalanceEntityProvider : PreviewParameterProvider<PlayerBalanceEntity> {
-    override val values = listOf(PlayerBalanceEntity(name = "Nishit")).asSequence()
-}

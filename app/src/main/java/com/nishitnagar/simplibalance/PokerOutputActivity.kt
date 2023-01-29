@@ -19,12 +19,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.nishitnagar.simplibalance.model.DismissActivityState
 import com.nishitnagar.simplibalance.ui.theme.SimplibalanceTheme
 import com.nishitnagar.simplibalance.viewmodel.PlayerBalanceViewModel
-import com.nishitnagar.simplibalance.viewmodel.PlayerBalanceViewModelProvider
 import com.nishitnagar.simplibalance.viewmodel.PlayerViewModelInterface
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -40,11 +37,8 @@ class PokerOutputActivity : ComponentActivity() {
     }
 }
 
-@Preview
 @Composable
-fun BalanceOutputScreen(
-    @PreviewParameter(PlayerBalanceViewModelProvider::class) playerBalanceViewModel: PlayerViewModelInterface
-) {
+fun BalanceOutputScreen(playerBalanceViewModel: PlayerViewModelInterface) {
     val dismissActivityState = remember { mutableStateOf(DismissActivityState.KEEP) }
     SimplibalanceTheme {
         Scaffold(topBar = {

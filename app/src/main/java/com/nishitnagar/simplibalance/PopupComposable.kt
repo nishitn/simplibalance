@@ -14,10 +14,8 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.nishitnagar.simplibalance.ui.theme.SimplibalanceTheme
 import kotlinx.coroutines.android.awaitFrame
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
@@ -71,10 +69,22 @@ fun AddPlayerPopup(
     }
 }
 
-@Preview
 @Composable
-fun PreviewAddPlayerPopup() {
-    SimplibalanceTheme {
-        AddPlayerPopup(onClickSave = {}, onCLickDismiss = {})
-    }
+fun ConfirmationPopup(
+    title: @Composable () -> Unit,
+    text: @Composable () -> Unit,
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit,
+    confirmButtonText: String = "Confirm",
+    dismissButtonText: String = "Cancel"
+) {
+    AlertDialog(title = title, text = text, onDismissRequest = onDismiss, confirmButton = {
+        Button(onClick = onConfirm) {
+            Text(confirmButtonText)
+        }
+    }, dismissButton = {
+        TextButton(onClick = onDismiss) {
+            Text(dismissButtonText)
+        }
+    })
 }

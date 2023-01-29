@@ -18,19 +18,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.nishitnagar.simplibalance.data.ValueRatioEntity
 import com.nishitnagar.simplibalance.utils.decimalFormat
 import com.nishitnagar.simplibalance.viewmodel.ValueRatioViewModel
-import com.nishitnagar.simplibalance.viewmodel.ValueRatioViewModelProvider
 
-@Preview(showBackground = true)
 @Composable
-fun ValueSetter(
-    @PreviewParameter(ValueRatioViewModelProvider::class) valueRatioViewModel: ValueRatioViewModel
-) {
+fun ValueSetter(valueRatioViewModel: ValueRatioViewModel) {
     val valueRatios = valueRatioViewModel.valueRatiosFlow.collectAsState(initial = listOf())
 
     Surface(modifier = Modifier.wrapContentSize(), color = MaterialTheme.colorScheme.secondaryContainer) {
@@ -50,8 +44,7 @@ fun ValueSetterRow(item: ValueRatioEntity, valueRatioViewModel: ValueRatioViewMo
         Row(
             modifier = Modifier.padding(vertical = 8.dp), verticalAlignment = Alignment.CenterVertically
         ) {
-            ValueSetterTextField(
-                value = item.buyIn,
+            ValueSetterTextField(value = item.buyIn,
                 label = "Buy Ins",
                 modifier = Modifier.weight(1f),
                 onValueChange = {
@@ -90,10 +83,7 @@ fun ValueSetterRow(item: ValueRatioEntity, valueRatioViewModel: ValueRatioViewMo
 
 @Composable
 fun ValueSetterTextField(
-    value: Double?,
-    label: String,
-    modifier: Modifier = Modifier,
-    onValueChange: (String) -> Unit
+    value: Double?, label: String, modifier: Modifier = Modifier, onValueChange: (String) -> Unit
 ) {
     var state by remember { mutableStateOf(TextFieldValue(decimalFormat.format(value))) }
 

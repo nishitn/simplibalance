@@ -30,10 +30,6 @@ abstract class AppDatabase : RoomDatabase() {
                             }
                         }
                     }
-
-                    override fun onOpen(db: SupportSQLiteDatabase) {
-                        // do something every time database is open
-                    }
                 }
 
                 INSTANCE = Room.databaseBuilder(context, AppDatabase::class.java, "simplibalance.db")

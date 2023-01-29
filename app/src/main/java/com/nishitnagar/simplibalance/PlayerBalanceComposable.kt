@@ -20,11 +20,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.nishitnagar.simplibalance.data.PlayerBalanceEntity
-import com.nishitnagar.simplibalance.data.PlayerBalanceEntityProvider
-import com.nishitnagar.simplibalance.model.RemovePlayerPopupState
+import com.nishitnagar.simplibalance.model.PopupState
 import com.nishitnagar.simplibalance.utils.decimalFormat
 import com.nishitnagar.simplibalance.viewmodel.PlayerViewModelInterface
 
@@ -43,10 +41,9 @@ fun PlayerBalanceColumn(playerBalanceViewModel: PlayerViewModelInterface) {
 
 @Composable
 fun PlayerBalanceRow(
-    @PreviewParameter(PlayerBalanceEntityProvider::class) item: PlayerBalanceEntity,
-    playerBalanceViewModel: PlayerViewModelInterface
+    item: PlayerBalanceEntity, playerBalanceViewModel: PlayerViewModelInterface
 ) {
-    val removePlayerPopupState = remember { mutableStateOf(RemovePlayerPopupState.CLOSE) }
+    val removePlayerPopupState = remember { mutableStateOf(PopupState.CLOSE) }
     Column(
         modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
     ) {
@@ -66,26 +63,26 @@ fun PlayerBalanceRow(
                     })
                 }
                 Row {
-                    BalanceTextField(value = item.initialValue,
+                    BalanceTextField(value = item.initialChips,
                         label = "Initial Chips",
                         modifier = Modifier.weight(1f),
                         onValueChange = {
-                            item.initialValue = it.toDoubleOrNull()
+                            item.initialChips = it.toDoubleOrNull()
                             playerBalanceViewModel.update(item)
                         })
 
                     Spacer(modifier = Modifier.width(8.dp))
 
-                    BalanceTextField(value = item.finalValue,
+                    BalanceTextField(value = item.finalChips,
                         label = "Final Chips",
                         modifier = Modifier.weight(1f),
                         onValueChange = {
-                            item.finalValue = it.toDoubleOrNull()
+                            item.finalChips = it.toDoubleOrNull()
                             playerBalanceViewModel.update(item)
                         })
                 }
             }
-            IconButton(onClick = { removePlayerPopupState.value = RemovePlayerPopupState.OPEN }) {
+            IconButton(onClick = { removePlayerPopupState.value = PopupState.OPEN }) {
                 Icon(Icons.Outlined.Delete, "Remove Player", tint = MaterialTheme.colorScheme.onBackground)
             }
         }
@@ -101,7 +98,7 @@ fun PlayerBalanceRow(
     }
 
     ControlDeletePlayer(
-        item = item, removePlayerPopupState = removePlayerPopupState, playerBalanceViewModel = playerBalanceViewModel
+        item = item, popupState = removePlayerPopupState, playerBalanceViewModel = playerBalanceViewModel
     )
 }
 

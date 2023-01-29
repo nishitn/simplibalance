@@ -43,8 +43,7 @@ class AppModule {
     @Singleton
     @Provides
     fun provideSettlementRepository(
-        balanceRepository: BalanceRepository,
-        valueRatioRepository: ValueRatioRepository
+        balanceRepository: BalanceRepository, valueRatioRepository: ValueRatioRepository
     ): SettlementRepository {
         return SettlementRepository(balanceRepository, valueRatioRepository)
     }
