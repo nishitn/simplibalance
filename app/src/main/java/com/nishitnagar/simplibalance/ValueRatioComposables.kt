@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.nishitnagar.simplibalance.data.ValueRatioEntity
+import com.nishitnagar.simplibalance.utils.decimalFormat
 import com.nishitnagar.simplibalance.viewmodel.ValueRatioViewModel
 import com.nishitnagar.simplibalance.viewmodel.ValueRatioViewModelProvider
 
@@ -30,7 +31,7 @@ import com.nishitnagar.simplibalance.viewmodel.ValueRatioViewModelProvider
 fun ValueSetter(
     @PreviewParameter(ValueRatioViewModelProvider::class) valueRatioViewModel: ValueRatioViewModel
 ) {
-    val valueRatios = valueRatioViewModel.valueRatios().collectAsState(initial = listOf())
+    val valueRatios = valueRatioViewModel.valueRatiosFlow.collectAsState(initial = listOf())
 
     Surface(modifier = Modifier.wrapContentSize(), color = MaterialTheme.colorScheme.secondaryContainer) {
         LazyColumn(
@@ -94,7 +95,7 @@ fun ValueSetterTextField(
     modifier: Modifier = Modifier,
     onValueChange: (String) -> Unit
 ) {
-    var state by remember { mutableStateOf(TextFieldValue(String.format("%.00f", value))) }
+    var state by remember { mutableStateOf(TextFieldValue(decimalFormat.format(value))) }
 
     OutlinedTextField(value = state,
         modifier = modifier.onFocusChanged { focusState ->

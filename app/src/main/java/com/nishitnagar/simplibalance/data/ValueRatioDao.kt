@@ -15,5 +15,8 @@ interface ValueRatioDao {
     suspend fun update(valueRatioEntity: ValueRatioEntity)
 
     @Query("SELECT * FROM Value_Ratio LIMIT 1")
-    fun getValueRatio(): Flow<List<ValueRatioEntity>>
+    suspend fun getValueRatioList(): List<ValueRatioEntity>
+
+    @Query("SELECT * FROM Value_Ratio LIMIT 1")
+    fun getValueRatioFlow(): Flow<List<ValueRatioEntity>>
 }

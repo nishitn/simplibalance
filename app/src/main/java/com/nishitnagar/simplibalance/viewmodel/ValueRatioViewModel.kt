@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 interface ValueRatioViewModelInterface {
-    fun valueRatios(): Flow<List<ValueRatioEntity>>
+    val valueRatiosFlow: Flow<List<ValueRatioEntity>>
 
     fun update(valueRatioEntity: ValueRatioEntity)
 }
@@ -24,7 +24,7 @@ class ValueRatioViewModel @Inject constructor(
 ) : ViewModel(), ValueRatioViewModelInterface {
     private val ioScope = CoroutineScope(Dispatchers.IO)
 
-    override fun valueRatios(): Flow<List<ValueRatioEntity>> = valueRatioRepository.getValueRatios()
+    override val valueRatiosFlow: Flow<List<ValueRatioEntity>> = valueRatioRepository.getValueRatiosFlow()
 
     override fun update(valueRatioEntity: ValueRatioEntity) {
         ioScope.launch {
@@ -35,7 +35,7 @@ class ValueRatioViewModel @Inject constructor(
 
 class ValueRatioViewModelProvider : PreviewParameterProvider<ValueRatioViewModelInterface> {
     val previewViewModel = object : ValueRatioViewModelInterface {
-        override fun valueRatios(): Flow<List<ValueRatioEntity>> = flowOf(
+        override val valueRatiosFlow: Flow<List<ValueRatioEntity>> = flowOf(
             listOf(
                 ValueRatioEntity(
                     buyIn = 1.0, chip = 8300.0, money = 250.0

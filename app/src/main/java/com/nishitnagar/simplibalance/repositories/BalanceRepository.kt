@@ -7,7 +7,9 @@ import kotlinx.coroutines.flow.Flow
 class BalanceRepository(
     private val playerBalanceDao: PlayerBalanceDao
 ) {
-    fun getPlayerBalancesFlow(): Flow<List<PlayerBalanceEntity>> = playerBalanceDao.getPlayerBalances()
+    fun getPlayerBalancesFlow(): Flow<List<PlayerBalanceEntity>> = playerBalanceDao.getPlayerBalancesFlow()
+
+    suspend fun getPlayerBalancesList(): List<PlayerBalanceEntity> = playerBalanceDao.getPlayerBalancesList()
 
     suspend fun insert(playerBalanceEntity: PlayerBalanceEntity) = playerBalanceDao.insert(playerBalanceEntity)
 

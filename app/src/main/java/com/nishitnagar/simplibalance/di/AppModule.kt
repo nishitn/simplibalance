@@ -5,6 +5,7 @@ import com.nishitnagar.simplibalance.data.AppDatabase
 import com.nishitnagar.simplibalance.data.PlayerBalanceDao
 import com.nishitnagar.simplibalance.data.ValueRatioDao
 import com.nishitnagar.simplibalance.repositories.BalanceRepository
+import com.nishitnagar.simplibalance.repositories.SettlementRepository
 import com.nishitnagar.simplibalance.repositories.ValueRatioRepository
 import dagger.Module
 import dagger.Provides
@@ -37,6 +38,15 @@ class AppModule {
     @Provides
     fun provideValueRatioDao(appDatabase: AppDatabase): ValueRatioDao {
         return appDatabase.valueRatioDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideSettlementRepository(
+        balanceRepository: BalanceRepository,
+        valueRatioRepository: ValueRatioRepository
+    ): SettlementRepository {
+        return SettlementRepository(balanceRepository, valueRatioRepository)
     }
 
     @Singleton

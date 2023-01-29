@@ -7,7 +7,9 @@ import kotlinx.coroutines.flow.Flow
 class ValueRatioRepository(
     private val valueRatioDao: ValueRatioDao
 ) {
-    fun getValueRatios(): Flow<List<ValueRatioEntity>> = valueRatioDao.getValueRatio()
+    fun getValueRatiosFlow(): Flow<List<ValueRatioEntity>> = valueRatioDao.getValueRatioFlow()
+
+    suspend fun getValueRatiosList(): List<ValueRatioEntity> = valueRatioDao.getValueRatioList()
 
     suspend fun update(valueRatioEntity: ValueRatioEntity) {
         valueRatioDao.update(valueRatioEntity)

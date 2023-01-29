@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import com.nishitnagar.simplibalance.data.PlayerBalanceEntity
 import com.nishitnagar.simplibalance.data.PlayerBalanceEntityProvider
 import com.nishitnagar.simplibalance.model.RemovePlayerPopupState
+import com.nishitnagar.simplibalance.utils.decimalFormat
 import com.nishitnagar.simplibalance.viewmodel.PlayerViewModelInterface
 
 @Composable
@@ -106,11 +107,11 @@ fun PlayerBalanceRow(
 
 @Composable
 fun BuyInTextField(value: Double?, onValueChange: (String) -> Unit) {
-    var buyInValue by remember { mutableStateOf(TextFieldValue(String.format("%.00f", value))) }
+    var buyInValue by remember { mutableStateOf(TextFieldValue(decimalFormat.format(value))) }
     Row(verticalAlignment = Alignment.CenterVertically) {
         TextButton(onClick = {
             val buyIn = buyInValue.text.toDoubleOrNull()
-            if (buyIn != null) buyInValue = TextFieldValue(String.format("%.00f", buyInValue.text.toDouble() - 1))
+            if (buyIn != null) buyInValue = TextFieldValue(decimalFormat.format(buyInValue.text.toDouble() - 1))
             onValueChange(buyInValue.text)
         }) {
             Text("-")
@@ -129,7 +130,7 @@ fun BuyInTextField(value: Double?, onValueChange: (String) -> Unit) {
 
         TextButton(onClick = {
             val buyIn = buyInValue.text.toDoubleOrNull()
-            if (buyIn != null) buyInValue = TextFieldValue(String.format("%.00f", buyInValue.text.toDouble() + 1))
+            if (buyIn != null) buyInValue = TextFieldValue(decimalFormat.format(buyInValue.text.toDouble() + 1))
             onValueChange(buyInValue.text)
         }) {
             Text("+")
@@ -139,7 +140,7 @@ fun BuyInTextField(value: Double?, onValueChange: (String) -> Unit) {
 
 @Composable
 fun BalanceTextField(value: Double?, label: String, modifier: Modifier = Modifier, onValueChange: (String) -> Unit) {
-    var state by remember { mutableStateOf(TextFieldValue(String.format("%.00f", value))) }
+    var state by remember { mutableStateOf(TextFieldValue(decimalFormat.format(value))) }
     OutlinedTextField(value = state,
         modifier = modifier.onFocusChanged { focusState ->
             if (focusState.isFocused) {
