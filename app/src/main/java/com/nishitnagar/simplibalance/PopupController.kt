@@ -19,7 +19,7 @@ fun ControlAddPlayerPopup(
 ) {
     when (popupState.value) {
         PopupState.OPEN -> {
-            AddPlayerPopup(onCLickDismiss = { popupState.value = PopupState.CLOSE }, onClickSave = {
+            AddPlayerPopup(onDismiss = { popupState.value = PopupState.CLOSE }, onClickSave = {
                 playerBalanceViewModel.insert(PlayerBalanceEntity(name = it))
                 popupState.value = PopupState.CLOSE
             })
