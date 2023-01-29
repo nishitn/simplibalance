@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -42,9 +41,7 @@ fun BalanceInputScreen(
 ) {
     SimplibalanceTheme {
         val addPlayerPopupState = remember { mutableStateOf(PopupState.CLOSE) }
-        Scaffold(topBar = {
-            AppBar(navigationIcon = { IconButton(onClick = {}) { Icon(Icons.Outlined.Menu, "Menu") } })
-        },
+        Scaffold(topBar = { AppBar() },
             content = {
                 MainContent(
                     modifier = Modifier.padding(it),
@@ -80,7 +77,7 @@ fun MainContent(
 }
 
 @Composable
-fun AppBar(navigationIcon: @Composable () -> Unit) {
+fun AppBar(navigationIcon: @Composable () -> Unit = {}) {
     TopAppBar(
         title = { Text(text = "SimpliBalance") },
         navigationIcon = navigationIcon,
