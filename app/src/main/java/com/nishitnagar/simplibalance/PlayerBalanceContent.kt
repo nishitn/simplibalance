@@ -9,6 +9,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -23,6 +24,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.nishitnagar.simplibalance.data.PlayerBalanceEntity
 import com.nishitnagar.simplibalance.data.PlayerBalanceEntityProvider
+import com.nishitnagar.simplibalance.model.RemovePlayerPopupState
 import com.nishitnagar.simplibalance.viewmodel.PlayerViewModelInterface
 
 @Composable
@@ -43,42 +45,48 @@ fun PlayerBalanceRow(
     @PreviewParameter(PlayerBalanceEntityProvider::class) item: PlayerBalanceEntity,
     playerBalanceViewModel: PlayerViewModelInterface
 ) {
+    val removePlayerPopupState = remember { mutableStateOf(RemovePlayerPopupState.CLOSE) }
     Column(
         modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(
-                text = item.name,
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(start = 8.dp),
-                style = MaterialTheme.typography.bodyLarge
-            )
-            BuyInTextField(value = item.buyIns, onValueChange = {
-                item.buyIns = if (it.toDoubleOrNull() == null) 0.0 else it.toDouble()
-                playerBalanceViewModel.update(item)
-            })
-        }
-        Row {
-            BalanceTextField(
-                value = item.initialValue,
-                label = "Initial Value",
-                modifier = Modifier.weight(1f),
-                onValueChange = {
-                    item.initialValue = if (it.toDoubleOrNull() == null) 0.0 else it.toDouble()
-                    playerBalanceViewModel.update(item)
-                })
+            Column(modifier = Modifier.weight(1f)) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = item.name,
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(start = 8.dp),
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                    BuyInTextField(value = item.buyIns, onValueChange = {
+                        item.buyIns = it.toDoubleOrNull()
+                        playerBalanceViewModel.update(item)
+                    })
+                }
+                Row {
+                    BalanceTextField(value = item.initialValue,
+                        label = "Initial Chips",
+                        modifier = Modifier.weight(1f),
+                        onValueChange = {
+                            item.initialValue = it.toDoubleOrNull()
+                            playerBalanceViewModel.update(item)
+                        })
 
-            Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(8.dp))
 
-            BalanceTextField(
-                value = item.finalValue,
-                label = "Final Value",
-                modifier = Modifier.weight(1f),
-                onValueChange = {
-                    item.finalValue = if (it.toDoubleOrNull() == null) 0.0 else it.toDouble()
-                    playerBalanceViewModel.update(item)
-                })
+                    BalanceTextField(value = item.finalValue,
+                        label = "Final Chips",
+                        modifier = Modifier.weight(1f),
+                        onValueChange = {
+                            item.finalValue = it.toDoubleOrNull()
+                            playerBalanceViewModel.update(item)
+                        })
+                }
+            }
+            IconButton(onClick = { removePlayerPopupState.value = RemovePlayerPopupState.OPEN }) {
+                Icon(Icons.Outlined.Delete, "Remove Player", tint = MaterialTheme.colorScheme.onBackground)
+            }
         }
         Spacer(
             modifier = Modifier
@@ -90,10 +98,14 @@ fun PlayerBalanceRow(
                 .background(Color.Gray)
         )
     }
+
+    ControlDeletePlayer(
+        item = item, removePlayerPopupState = removePlayerPopupState, playerBalanceViewModel = playerBalanceViewModel
+    )
 }
 
 @Composable
-fun BuyInTextField(value: Double, onValueChange: (String) -> Unit) {
+fun BuyInTextField(value: Double?, onValueChange: (String) -> Unit) {
     var buyInValue by remember { mutableStateOf(TextFieldValue(String.format("%.00f", value))) }
     Row(verticalAlignment = Alignment.CenterVertically) {
         TextButton(onClick = {
@@ -126,8 +138,8 @@ fun BuyInTextField(value: Double, onValueChange: (String) -> Unit) {
 }
 
 @Composable
-fun BalanceTextField(value: Double, label: String, modifier: Modifier = Modifier, onValueChange: (String) -> Unit) {
-    var state by remember { mutableStateOf(TextFieldValue(value.toString())) }
+fun BalanceTextField(value: Double?, label: String, modifier: Modifier = Modifier, onValueChange: (String) -> Unit) {
+    var state by remember { mutableStateOf(TextFieldValue(String.format("%.00f", value))) }
     OutlinedTextField(value = state,
         modifier = modifier.onFocusChanged { focusState ->
             if (focusState.isFocused) {
@@ -145,5 +157,7 @@ fun BalanceTextField(value: Double, label: String, modifier: Modifier = Modifier
         onValueChange = {
             state = it
             onValueChange(state.text)
-        })
+        },
+        singleLine = true
+    )
 }

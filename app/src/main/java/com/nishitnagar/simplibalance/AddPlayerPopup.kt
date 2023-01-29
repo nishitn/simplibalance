@@ -3,6 +3,7 @@ package com.nishitnagar.simplibalance
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -11,6 +12,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -34,12 +36,15 @@ fun AddPlayerPopup(
                 .background(color = MaterialTheme.colorScheme.surface)
                 .padding(PaddingValues(horizontal = 16.dp, vertical = 16.dp))
         ) {
-            TextField(value = state,
+            TextField(
+                value = state,
                 onValueChange = { state = it },
                 modifier = Modifier
                     .fillMaxWidth()
                     .focusRequester(focusRequester),
-                placeholder = { Text("Add Player Name") })
+                placeholder = { Text("Add Player Name") },
+                keyboardOptions = KeyboardOptions.Default.copy(capitalization = KeyboardCapitalization.Sentences)
+            )
 
             Row(
                 modifier = Modifier

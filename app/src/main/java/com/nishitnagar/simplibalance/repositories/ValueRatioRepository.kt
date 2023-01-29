@@ -9,8 +9,7 @@ class ValueRatioRepository(
 ) {
     fun getValueRatios(): Flow<List<ValueRatioEntity>> = valueRatioDao.getValueRatio()
 
-    suspend fun insert(valueRatioEntity: ValueRatioEntity) {
-        valueRatioDao.deleteAll()
-        valueRatioDao.insert(valueRatioEntity)
+    suspend fun update(valueRatioEntity: ValueRatioEntity) {
+        valueRatioDao.update(valueRatioEntity)
     }
 }

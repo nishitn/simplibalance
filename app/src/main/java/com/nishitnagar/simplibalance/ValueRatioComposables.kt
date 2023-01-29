@@ -49,38 +49,32 @@ fun ValueSetterRow(item: ValueRatioEntity, valueRatioViewModel: ValueRatioViewMo
         Row(
             modifier = Modifier.padding(vertical = 8.dp), verticalAlignment = Alignment.CenterVertically
         ) {
-            ValueSetterTextField(value = item.buyIn,
+            ValueSetterTextField(
+                value = item.buyIn,
                 label = "Buy Ins",
                 modifier = Modifier.weight(1f),
                 onValueChange = {
-                    item.buyIn = if (it.toDoubleOrNull() == null) 0.0 else it.toDouble()
-                    valueRatioViewModel.insert(item)
+                    item.buyIn = it.toDoubleOrNull()
+                    valueRatioViewModel.update(item)
                 })
             Text(
                 text = "=", modifier = Modifier
                     .padding(horizontal = 8.dp)
                     .wrapContentWidth()
             )
-            ValueSetterTextField(
-                value = item.chip,
-                label = "In Chips",
-                modifier = Modifier.weight(1f),
-                onValueChange = {
-                    item.chip = if (it.toDoubleOrNull() == null) 0.0 else it.toDouble()
-                    valueRatioViewModel.insert(item)
-                })
+            ValueSetterTextField(value = item.chip, label = "Chips", modifier = Modifier.weight(1f), onValueChange = {
+                item.chip = it.toDoubleOrNull()
+                valueRatioViewModel.update(item)
+            })
             Text(
                 text = "=", modifier = Modifier
                     .padding(horizontal = 8.dp)
                     .wrapContentWidth()
             )
-            ValueSetterTextField(value = item.money,
-                label = "In Money",
-                modifier = Modifier.weight(1f),
-                onValueChange = {
-                    item.money = if (it.toDoubleOrNull() == null) 0.0 else it.toDouble()
-                    valueRatioViewModel.insert(item)
-                })
+            ValueSetterTextField(value = item.money, label = "Money", modifier = Modifier.weight(1f), onValueChange = {
+                item.money = it.toDoubleOrNull()
+                valueRatioViewModel.update(item)
+            })
         }
 
         Spacer(
@@ -94,8 +88,13 @@ fun ValueSetterRow(item: ValueRatioEntity, valueRatioViewModel: ValueRatioViewMo
 }
 
 @Composable
-fun ValueSetterTextField(value: Double, label: String, modifier: Modifier = Modifier, onValueChange: (String) -> Unit) {
-    var state by remember { mutableStateOf(TextFieldValue(value.toString())) }
+fun ValueSetterTextField(
+    value: Double?,
+    label: String,
+    modifier: Modifier = Modifier,
+    onValueChange: (String) -> Unit
+) {
+    var state by remember { mutableStateOf(TextFieldValue(String.format("%.00f", value))) }
 
     OutlinedTextField(value = state,
         modifier = modifier.onFocusChanged { focusState ->
@@ -114,5 +113,7 @@ fun ValueSetterTextField(value: Double, label: String, modifier: Modifier = Modi
         onValueChange = {
             state = it
             onValueChange(state.text)
-        })
+        },
+        singleLine = true
+    )
 }

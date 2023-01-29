@@ -15,7 +15,7 @@ import javax.inject.Inject
 interface ValueRatioViewModelInterface {
     fun valueRatios(): Flow<List<ValueRatioEntity>>
 
-    fun insert(valueRatioEntity: ValueRatioEntity)
+    fun update(valueRatioEntity: ValueRatioEntity)
 }
 
 @HiltViewModel
@@ -26,9 +26,9 @@ class ValueRatioViewModel @Inject constructor(
 
     override fun valueRatios(): Flow<List<ValueRatioEntity>> = valueRatioRepository.getValueRatios()
 
-    override fun insert(valueRatioEntity: ValueRatioEntity) {
+    override fun update(valueRatioEntity: ValueRatioEntity) {
         ioScope.launch {
-            valueRatioRepository.insert(valueRatioEntity)
+            valueRatioRepository.update(valueRatioEntity)
         }
     }
 }
@@ -43,7 +43,7 @@ class ValueRatioViewModelProvider : PreviewParameterProvider<ValueRatioViewModel
             )
         )
 
-        override fun insert(valueRatioEntity: ValueRatioEntity) {
+        override fun update(valueRatioEntity: ValueRatioEntity) {
             /* Not needed */
         }
     }
